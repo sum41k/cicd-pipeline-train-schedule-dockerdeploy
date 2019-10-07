@@ -1,38 +1,3 @@
-docker login --username=sum41k --email=<hub-email>
-docker build -t sum41k/train-schedule
-
-Dockerfile:
-FROM node:carbon
-WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 8080
-CMD ["npm", "start"]
-
-docker run -p 8083:8080 -d sum41k/train-schedule --restart always
-
-docker update <container_id> --restart always
-
-Вот что нужно делать на сервере где находится дженкинс:
-
-sudo yum -y install docker
-sudo systemctl start docker
-sudo systemctl enable docker
-sudo groupadd docker
-sudo usermod -aG docker jenkins
-sudo systemctl restart jenkins
-sudo systemctl restart docker
-Таким образом ставится докер и даются права дженкинсу на его использование.
-
-
-Настройки пайплайна с докером: 
-1. Нужны 3 пользователя:
-- docker_hub_login # доступы от моего аккаунта на докерхабе
-- webserver_login # сервер для продакшена
-- github_login доступы к репозиторию гита :
-https://github.com/sum41k/cicd-pipeline-train-schedule-dockerdeploy
-
 pipeline {
     agent any
     stages {
